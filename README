@@ -1,0 +1,12 @@
+cgit-helper
+-------------
+
+a collection of simple shell scripts for managing cgit.
+
+scripts:
+- cgit-create
+- cgit-delete [soon]
+- cgit-push [soon]
+
+------------------
+moedev team @ 2020

@@ -11,7 +11,7 @@ help_me() {
     - cgit-create :
     -
     - cgit-create new <new_repository>   - create empty repository
-    - cgit-create clone <url>            - clone repository
+    - cgit-create import <url>          - import a repository
     "
 }
 
@@ -30,16 +30,16 @@ empty_repo() {
         git --bare init
 }
 
-clone_repo() {
+import_repo() {
     # die if no url given
     if [ ! $1 ]; then
-       die "usage: cgit-create clone <url>"
+       die "usage: cgit-create import <url>"
     fi
 
     # clone repository
     git clone --bare $1
     
-    # set the project name
+    # set the repository name
     new_repo=$(echo "$1" | sed 's#.*/##')
 
     # move, then remove old origin
@@ -61,8 +61,8 @@ case "$1" in
   new)
       empty_repo "$2";;
 
-  clone)
-      clone_repo "$2";;
+  import)
+      import_repo "$2";;
   *)
       help_me ;;
 esac

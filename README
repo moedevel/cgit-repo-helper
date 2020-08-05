@@ -5,7 +5,12 @@ a collection of simple shell scripts for managing cgit.
 
 scripts:
 - cgit-create
+  |- cgit-create new <repository_name> /// create empty repository
+  |- cgit-create import <url>          /// import a repository (all log from old url
+                                                                still exist)
+
 - cgit-delete [soon]
+
 - cgit-push [soon]
 
 ------------------

@@ -1,0 +1,68 @@
+#!/bin/sh
+# vim: set ts=4 sw=4 sts=4 et:
+
+die() {
+    echo "$1" >&2
+    exit 1
+}
+
+help_me() {
+    die "
+    - cgit-create :
+    -
+    - cgit-create new <new_repository>   - create empty repository
+    - cgit-create clone <url>            - clone repository
+    "
+}
+
+empty_repo() {
+    # die if no repository name given
+    if [ ! $1 ]; then
+       die "usage: cgit-create new <new_repository>"
+    fi
+    
+    # set the repository name, add .git if necessary
+    new_repo=$(echo "$1" | sed 's/\.git$\|$/.git/i')
+
+    # create and initialise the repository
+    mkdir "$new_repo" &&  \
+        cd "$new_repo" && \
+        git --bare init
+}
+
+clone_repo() {
+    # die if no url given
+    if [ ! $1 ]; then
+       die "usage: cgit-create clone <url>"
+    fi
+
+    # clone repository
+    git clone --bare $1
+    
+    # set the project name
+    new_repo=$(echo "$1" | sed 's#.*/##')
+
+    # move, then remove old origin
+    cd "$new_repo" && \
+        git remote remove origin
+    
+    # tell user to set new origin
+    die "
+    success setup repository, don't forget to set new origin!
+    example:
+        git remote add origin git@server_host:repo.git
+    "
+}
+
+case "$1" in
+  help)
+      help_me ;;
+
+  new)
+      empty_repo "$2";;
+
+  clone)
+      clone_repo "$2";;
+  *)
+      help_me ;;
+esac

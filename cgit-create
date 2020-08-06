@@ -11,7 +11,7 @@ help_me() {
     - cgit-create :
     -
     - cgit-create new <new_repository>   - create empty repository
-    - cgit-create import <url>          - import a repository
+    - cgit-create import <url>           - import a repository
     "
 }
 
@@ -25,7 +25,7 @@ empty_repo() {
     new_repo=$(echo "$1" | sed 's/\.git$\|$/.git/i')
 
     # create and initialise the repository
-    mkdir "$new_repo" &&  \
+    mkdir "$new_repo"  && \
         cd "$new_repo" && \
         git --bare init
 }
@@ -36,8 +36,9 @@ import_repo() {
        die "usage: cgit-create import <url>"
     fi
 
-    # clone repository
-    git clone --bare $1
+    # clone repository or die
+    git clone --bare $1 ||
+        die "failed to importing repo"
     
     # set the repository name
     new_repo=$(echo "$1" | sed 's#.*/##')
